@@ -24,6 +24,8 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         audioEngine = AVAudioEngine()
         recognizer.delegate = self
+        setAudioSession()
+    
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -45,29 +47,11 @@ class ViewController: UIViewController {
         }
     }
     
-    
-    func stopRecognition() {
-      audioEngine.stop()
-      audioEngine.inputNode.removeTap(onBus: 0)
-      recognitionRequest?.endAudio()
-      recordButton.setTitle("Start", for: .normal)
-    }
-    
-    private func refreshTask() {
-        if let recognitionTask = recognitionTask {
-            recognitionTask.cancel()
-            self.recognitionTask = nil
-        }
-    }
-    
+        
+
     func startRecognition() throws {
         
         refreshTask()
-
-        let audioSession = AVAudioSession.sharedInstance()
-        try audioSession.setCategory(.record, mode: .measurement, options: [])
-        try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
-
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
         
         guard let recognitionRequest = recognitionRequest else { fatalError("Unable to created a SFSpeechAudioBufferRecognitionRequest object") }
@@ -96,11 +80,37 @@ class ViewController: UIViewController {
         
         let recordingFormat = inputNode.outputFormat(forBus: 0)
         inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
-            self.recognitionRequest?.append(buffer)
+            recognitionRequest.append(buffer)
         }
 
         try startAudioEngine()
     }
+    
+    private func setAudioSession() {
+        let audioSession = AVAudioSession.sharedInstance()
+        do{
+        try audioSession.setCategory(.record, mode: .measurement, options: [])
+        try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+        }catch{
+            fatalError("Unable to set audioSession")
+        }
+        
+        }
+    
+    private func stopRecognition() {
+      audioEngine.stop()
+      audioEngine.inputNode.removeTap(onBus: 0)
+      recognitionRequest?.endAudio()
+      recordButton.setTitle("Start", for: .normal)
+    }
+    
+    private func refreshTask() {
+        if let recognitionTask = recognitionTask {
+            recognitionTask.cancel()
+            self.recognitionTask = nil
+        }
+    }
+    
     
     private func startAudioEngine() throws {
         audioEngine.prepare()

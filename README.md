@@ -54,6 +54,7 @@ ViewControllerクラスにデリゲートを採用する
 speechRecognizerの状態変化を受け取れるようになる
 `SFSpeechRecognitionTaskDelegate`
 
+いつ呼ばれるかわからない。
 ```swift
 
 // MARK: SFSpeechRecognizerDelegate
@@ -71,13 +72,15 @@ public func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer, availabilit
 ```
 ## オーディオセッションの設定
 
+アプリでオーディオをどのように使用するかをシステムに伝えるオブジェクト。
+
 let audioSession = AVAudioSession.sharedInstance()
 try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
 try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
-let inputNode = audioEngine.inputNode
+
 
 ## 端末のマイクを使う準備
-
+let inputNode = audioEngine.inputNode
 
 
 ##RecordButtonの実装
@@ -154,3 +157,14 @@ private func requestRecognizerAuthorization() {
 }
 
 ```
+
+
+#参考文献
+
+https://swiswiswift.com/2017-05-13/
+
+https://terakoya.site/ios_dic/ios-dic-voice-recog/
+
+https://swift-ios.keicode.com/ios/speechrecognition-live.php
+
+https://github.com/furuya02/SpeechRecognizerSample/blob/master/SpeechRecognizerSample/ViewController.swift
