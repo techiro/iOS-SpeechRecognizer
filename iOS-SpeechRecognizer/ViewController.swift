@@ -25,10 +25,16 @@ class ViewController: UIViewController {
         audioEngine = AVAudioEngine()
         recognizer.delegate = self
         setAudioSession()
-    
+        textView.text = ""
     }
     
+    /*Description：関数の説明
+    Parameters：引数の説明
+    Returns：戻り値の説明
+ */
+    
     override func viewDidAppear(_ animated: Bool) {
+        
         SFSpeechRecognizer.requestAuthorization { (status) in
             if status != .authorized{
                 self.recordButton.isEnabled = false
@@ -70,11 +76,12 @@ class ViewController: UIViewController {
             }
 
             if error != nil || isFinal {
-                //エラーかisFinalフラグが立つと終了
+                //エラーかisFinalフラグが立つと終了ストップ
                 self.audioEngine.stop()
                 inputNode.removeTap(onBus: 0)
                 self.recognitionRequest = nil
                 self.recognitionTask = nil
+                self.recordButton.setTitle("スタート", for: .normal)
             }
     }
         
@@ -97,6 +104,10 @@ class ViewController: UIViewController {
         
         }
     
+    /// audioEngine.stop()
+    /// inputNode.removeTap(onBus: 0)
+    ///recognitionRequest?.endAudio()
+    ///recordButton.setTitle("Start", for: .normal)
     private func stopRecognition() {
       audioEngine.stop()
       audioEngine.inputNode.removeTap(onBus: 0)
@@ -121,6 +132,7 @@ class ViewController: UIViewController {
 
 
 extension ViewController: SFSpeechRecognizerDelegate {
+    
     func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer, availabilityDidChange available: Bool) {
         
         if available {

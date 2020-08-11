@@ -25,8 +25,12 @@
 
 ## マイク利用(AVAudioEngine)
 
-SFSpeechRecognizerの生成
-リクエストの作成
+## SFSpeechRecognizerの生成
+## リクエストの作成
+マイク等のオーディオバッファを利用する場合は、SFSpeechAudioBufferRecognitionRequestを使用します。
+
+
+
 リクエストの開始とデータ取得
 
 
@@ -49,6 +53,7 @@ speechRecognizer.delegate = self
  recognitionRequest?.endAudio()
  
 ```
+
 ###デリゲート処理
 ViewControllerクラスにデリゲートを採用する
 speechRecognizerの状態変化を受け取れるようになる
