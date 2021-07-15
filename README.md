@@ -54,12 +54,11 @@ speechRecognizer.delegate = self
  
 ```
 
-###デリゲート処理
+### デリゲート処理
 ViewControllerクラスにデリゲートを採用する
 speechRecognizerの状態変化を受け取れるようになる
 `SFSpeechRecognitionTaskDelegate`
 
-いつ呼ばれるかわからない。
 ```swift
 
 // MARK: SFSpeechRecognizerDelegate
@@ -75,6 +74,7 @@ public func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer, availabilit
     }
 }
 ```
+
 ## オーディオセッションの設定
 
 アプリでオーディオをどのように使用するかをシステムに伝えるオブジェクト。
